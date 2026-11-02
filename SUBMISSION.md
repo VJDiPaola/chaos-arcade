@@ -1,6 +1,8 @@
-# Chaos Arcade submission draft
+# Chaos Arcade submission
 
-Status: game built, publicly deployed, and connected to actual Twitch chat. The 75-second captioned demo contains a real `!speed` vote, Double Speed challenge, and scored result. The channel was offline. Video publication and final submission remain pending. Devpost draft 1279429 exists with the project name and pitch saved; the remaining content is prepared for the video link and owner confirmations.
+Status: **Submitted to the Codex x TwitchCon Hackathon on November 2, 2026, at approximately 3:57pm Eastern**, before the 4pm target. Devpost displayed "Project submitted!" and the project page lists the hackathon under "SUBMITTED TO." Entry: https://devpost.com/software/chaos-arcade. Submission ID: `1279429`.
+
+The game is publicly deployed and connected to actual Twitch chat. The 75-second captioned demo contains a real `!speed` vote, Double Speed challenge, and scored result. The channel was offline. The owner approved the final submission and rules/terms agreement. The video is Unlisted, with the made-for-kids audience setting selected at the owner's direction.
 
 Implementation checkpoint: `2a64840`. All 22 deterministic tests and the production build passed, including regressions for the browser fetch receiver and alignment between Twitch and browser clocks. The deployed clock fix was verified with an immediate real `!tiny` vote followed by `!reverse`: the choice changed while the voter count stayed at one. Browser checks also covered a full session, timeout, disconnected-live guard, 390px layout, and 1280x720 presentation. Actual tab capture, download, and MP4 decoding passed. The chosen captioned demo is silent; microphone capture was not used.
 
@@ -12,7 +14,7 @@ Chaos Arcade
 
 Chat picks the chaos. You stick the landing. A five-round Twitch game where viewers choose the obstacle and the streamer fights for the point.
 
-## Description draft
+## Project description
 
 ### Inspiration
 
@@ -50,10 +52,10 @@ Test the pacing with streamers and viewers, tune voting windows for stream delay
 
 - Game URL: https://chaos-arcade-teamvince.vercel.app/ (public page, rehearsal, and an actual Twitch-selected round verified).
 - Source repository: https://github.com/VJDiPaola/chaos-arcade (public, main branch).
-- YouTube demo: 75.033-second captioned MP4 prepared and decoded successfully; upload approval, publication, and logged-out playback pending.
+- YouTube demo: https://youtu.be/SDbK55K7JN8 — Unlisted, 75.033 seconds, captioned. The final MP4 decoded successfully; browser playback works; YouTube metadata was retrieved without authentication; Devpost accepted and embedded the link. The browser playback check used an existing signed-in session, so it is not described as logged-out playback proof.
 - Main Codex session ID: `01a18078-9a23-7320-bc0f-0df82dca7f6b`.
 - Real Twitch proof: read-only authorization and enabled EventSub subscription for team_vince; `!tiny` accepted as one vote, Tiny Target selected, challenge completed with chat score 1. Channel offline; no active broadcast claimed.
-- Devpost draft: https://devpost.com/submit-to/31742-codex-x-twitchcon-hackathon/manage/submissions/1279429-chaos-arcade/project_details/edit (Draft, 2/5 steps; not submitted).
+- Submitted entry: https://devpost.com/software/chaos-arcade (explicit submission confirmation observed at approximately 3:57pm Eastern on November 2, 2026).
 
 ## Built with
 

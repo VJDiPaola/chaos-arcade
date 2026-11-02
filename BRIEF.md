@@ -26,7 +26,9 @@ November 2: implementation commit `2a64840` passes 22 deterministic checks and t
 
 Live integration is verified in signed-in Chrome. Real Twitch commands selected Tiny Target and Double Speed and produced scored rounds. Live testing exposed an unbound browser fetch receiver, fixed in `f447079`, and a Twitch/browser clock mismatch, fixed in `2a64840`. A fresh deployed test accepted an immediate !tiny vote and replaced it with !reverse while keeping one voter. The channel was offline; this is real chat integration, not a broadcast claim.
 
-A 75-second captioned MP4 is recorded, assembled, and decoded successfully. YouTube publication and final submission remain pending owner confirmations. Devpost project creation is resolved; draft 1279429 exists, with source/session/description content prepared.
+A 75-second captioned MP4 is published as an Unlisted [YouTube demo](https://youtu.be/SDbK55K7JN8). Playback works, unauthenticated YouTube metadata resolves, and Devpost accepted the embedded video. The owner selected the made-for-kids audience setting.
+
+The [Devpost entry](https://devpost.com/software/chaos-arcade) was submitted on November 2 at approximately **3:57pm Eastern**, before the 4pm target. The owner confirmed eligibility, survey answers, and the final rules/terms agreement. Devpost displayed "Project submitted!" and "SUBMITTED TO Codex x TwitchCon Hackathon." Submission ID: `1279429`.
 
 ## Acceptance and submission evidence
 
