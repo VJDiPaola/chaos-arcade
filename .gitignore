@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vercel/
+.env
+.env.*
+!.env.example
+*token*
+*secret*
+evidence/
+playwright-report/
+test-results/
+.playwright-cli/
+output/playwright/
+*.log

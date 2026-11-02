@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "headers": [{"source":"/(.*)","headers":[
+    {"key":"X-Content-Type-Options","value":"nosniff"},
+    {"key":"Referrer-Policy","value":"no-referrer"},
+    {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' https://id.twitch.tv https://api.twitch.tv wss://*.twitch.tv; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"}
+  ]},
+  {"source":"/((?!record\\.html).*)","headers":[{"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=()"}]},
+  {"source":"/record.html","headers":[{"key":"Permissions-Policy","value":"camera=(), microphone=(self), geolocation=()"}]}
+  ]
+}
