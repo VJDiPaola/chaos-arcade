@@ -22,9 +22,11 @@ Original concept gallery and Last Shuttle prototype remain separate. This app is
 
 ## Current checkpoint
 
-November 2: implementation commit `f447079` passes 19 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are deployed at https://chaos-arcade-teamvince.vercel.app/ with public source at https://github.com/VJDiPaola/chaos-arcade. A public rehearsal round and the deployed security headers passed verification.
+November 2: implementation commit `2a64840` passes 22 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are deployed at https://chaos-arcade-teamvince.vercel.app/ with public source at https://github.com/VJDiPaola/chaos-arcade. A public rehearsal round and the deployed security headers passed verification.
 
-Live integration is verified in signed-in Chrome: Twitch confirmed the EventSub subscription for `team_vince`; an authorized `!tiny` message became one Twitch vote, selected Tiny Target (target 63–71), and the completed challenge awarded chat one point. The channel was offline; this is real Twitch chat proof, not a broadcast claim. Initial live testing exposed an unbound browser `fetch` receiver, fixed in `f447079` with a regression test. Recording, YouTube playback, and final submission remain pending. Devpost project creation currently stalls without creating a draft; a manual owner check is pending.
+Live integration is verified in signed-in Chrome. Real Twitch commands selected Tiny Target and Double Speed and produced scored rounds. Live testing exposed an unbound browser fetch receiver, fixed in `f447079`, and a Twitch/browser clock mismatch, fixed in `2a64840`. A fresh deployed test accepted an immediate !tiny vote and replaced it with !reverse while keeping one voter. The channel was offline; this is real chat integration, not a broadcast claim.
+
+A 75-second captioned MP4 is recorded, assembled, and decoded successfully. YouTube publication and final submission remain pending owner confirmations. Devpost project creation is resolved; draft 1279429 exists, with source/session/description content prepared.
 
 ## Acceptance and submission evidence
 
