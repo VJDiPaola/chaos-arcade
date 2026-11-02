@@ -1,6 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {TwitchChat} from '../src/twitch.js';
+test('default fetch preserves the global browser receiver for validation and subscription',async(t)=>{
+  const requests=[];
+  t.mock.method(globalThis,'fetch',async function(url) {
+    // Model a browser host method: the old this.fetchFn(...) binding must fail.
+    if(this!==globalThis) throw new TypeError('Illegal invocation');
+    requests.push(url);
+    return url.includes('/validate')
+      ? {ok:true,json:async()=>({client_id:'client123456',user_id:'owner',login:'channel',scopes:['user:read:chat']})}
+      : {status:202,json:async()=>({data:[{type:'channel.chat.message',status:'enabled'}]})};
+  });
+  const chat=new TwitchChat();
+  chat.identity=await chat.validate('test-only-token','client123456');
+  chat.token='test-only-token';chat.clientId='client123456';
+  await chat.subscribe('session');
+  assert.deepEqual(requests,[
+    'https://id.twitch.tv/oauth2/validate',
+    'https://api.twitch.tv/helix/eventsub/subscriptions'
+  ]);
+});
 function harness({scope=true, subscribeStatus=202}={}) {
   const requests=[], statuses=[], messages=[], sockets=[], timers=new Map();let id=0;
   const clock={setTimeout(fn,ms){timers.set(++id,{fn,ms});return id;},clearTimeout(i){timers.delete(i);},setInterval(fn,ms){timers.set(++id,{fn,ms});return id;},clearInterval(i){timers.delete(i);}};

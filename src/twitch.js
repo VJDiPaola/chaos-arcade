@@ -1,6 +1,7 @@
 const SOCKET_URL = 'wss://eventsub.wss.twitch.tv/ws?keepalive_timeout_seconds=30';
 export class TwitchChat {
-  constructor({onStatus = () => {}, onMessage = () => {}, fetchFn = globalThis.fetch,
+  // Keep the browser host-method receiver; a copied fetch called on this is invalid.
+  constructor({onStatus = () => {}, onMessage = () => {}, fetchFn = (...args) => globalThis.fetch(...args),
     Socket = globalThis.WebSocket, clock = globalThis} = {}) {
     Object.assign(this, {onStatus, onMessage, fetchFn, Socket, clock});
     this.sockets = new Set(); this.generation = 0; this.active = null; this.stopped = true;
