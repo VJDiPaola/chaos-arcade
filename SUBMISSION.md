@@ -1,6 +1,6 @@
 # Chaos Arcade submission draft
 
-Status: game built and locally verified; external release and account setup pending. This file does not establish deployment, Twitch verification, video upload, or submission. Update the links and claims against final evidence before pasting into Devpost.
+Status: game built, locally verified, and publicly deployed. A round and security headers were checked on the public deployment. Twitch app Client ID is configured; live authorization, message verification, video upload, and submission remain pending. Update the remaining links and claims against final evidence before pasting into Devpost.
 
 Local implementation checkpoint: `bd85168508a5689ce157b82863b5d027e29aea20`. All 18 deterministic tests and the production build passed. Browser checks completed a five-round session, timed-out challenge, disconnected-live guard, 390px layout, and 1280x720 presentation. Recorder assets load; actual screen and microphone capture still need a device test.
 
@@ -24,11 +24,11 @@ I used OpenAI Codex to explore five gameplay and visual directions, choose the a
 
 ## Required links and evidence
 
-- Game URL: pending deployment and public check.
-- Source repository: pending publication and access check.
+- Game URL: https://chaos-arcade-teamvince.vercel.app/ (public page and a rehearsal round verified).
+- Source repository: https://github.com/VJDiPaola/chaos-arcade (public, main branch).
 - YouTube demo: pending recording, upload, and logged-out playback.
 - Main Codex session ID: `01a18078-9a23-7320-bc0f-0df82dca7f6b`.
-- Real Twitch proof: pending account setup, app authorization, and message-to-vote readback.
+- Real Twitch proof: team_vince account and 2FA confirmed by owner; app Client ID supplied. App authorization and message-to-vote readback pending.
 - Devpost submission URL/status: pending.
 
 ## Built with

@@ -22,7 +22,7 @@ Original concept gallery and Last Shuttle prototype remain separate. This app is
 
 ## Current checkpoint
 
-November 2: implementation commit `bd85168508a5689ce157b82863b5d027e29aea20` passes 18 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are local. Real Twitch messages, public deployment, recorded video, and final submission remain separate pending evidence.
+November 2: implementation commit `bd85168508a5689ce157b82863b5d027e29aea20` passes 18 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are deployed at https://chaos-arcade-teamvince.vercel.app/ with public source at https://github.com/VJDiPaola/chaos-arcade. A public rehearsal round and the deployed security headers passed verification. The owner supplied the public Twitch Client ID after creating team_vince and enabling 2FA. Real Twitch message proof, recorded video, and final submission remain pending.
 
 ## Acceptance and submission evidence
 
