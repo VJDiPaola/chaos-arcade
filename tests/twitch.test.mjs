@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {TwitchChat} from '../src/twitch.js';
+import {Game} from '../src/engine.js';
 test('default fetch preserves the global browser receiver for validation and subscription',async(t)=>{
   const requests=[];
   t.mock.method(globalThis,'fetch',async function(url) {
@@ -22,6 +23,7 @@ test('default fetch preserves the global browser receiver for validation and sub
 });
 function harness({scope=true, subscribeStatus=202}={}) {
   const requests=[], statuses=[], messages=[], sockets=[], timers=new Map();let id=0;
+  const time={now:100000};
   const clock={setTimeout(fn,ms){timers.set(++id,{fn,ms});return id;},clearTimeout(i){timers.delete(i);},setInterval(fn,ms){timers.set(++id,{fn,ms});return id;},clearInterval(i){timers.delete(i);}};
   class Socket {
     constructor(url){this.url=url;this.closed=false;sockets.push(this);}
@@ -33,11 +35,53 @@ function harness({scope=true, subscribeStatus=202}={}) {
     return url.includes('/validate') ? {ok:true,json:async()=>({client_id:'client123456',user_id:'owner',login:'channel',scopes:scope?['user:read:chat']:[]})}
       : {status:subscribeStatus,json:async()=>({data:[{type:'channel.chat.message',status:'enabled'}]})};
   };
-  const chat=new TwitchChat({onStatus:s=>statuses.push(s),onMessage:m=>messages.push(m),fetchFn,Socket,clock});
+  const chat=new TwitchChat({onStatus:s=>statuses.push(s),onMessage:m=>messages.push(m),fetchFn,Socket,clock,now:()=>time.now});
   const connect=()=>chat.connect({token:'test-only-token',clientId:'client123456',channel:'channel'});
-  const welcome=socket=>socket.emit('session_welcome',{session:{id:'session',keepalive_timeout_seconds:30}});
-  return {chat,connect,welcome,requests,statuses,messages,sockets,timers,clock};
+  const welcome=(socket,serverAt=time.now)=>socket.emit('session_welcome',{session:{id:'session',keepalive_timeout_seconds:30}},{message_timestamp:new Date(serverAt).toISOString()});
+  const send=(serverAt,text='!tiny',messageId='m',userId='viewer')=>sockets.at(-1).emit('notification',{
+    subscription:{type:'channel.chat.message'},event:{broadcaster_user_id:'owner',chatter_user_id:userId,message_id:messageId,message:{text}}
+  },{message_timestamp:new Date(serverAt).toISOString()});
+  return {chat,connect,welcome,send,time,requests,statuses,messages,sockets,timers,clock};
 }
+test('server clock behind or ahead is normalized before the strict local ballot gate',async()=>{
+  for(const offset of [2000,-5000]) {
+    const h=harness();await h.connect();await h.welcome(h.sockets[0],100000-offset);
+    const game=new Game('live');game.openVote(100500);
+    let accepted=false;
+    h.chat.onMessage=message=>{h.messages.push(message);accepted=game.vote(message,h.time.now);};
+    h.time.now=101000;await h.send(100900-offset,'!speed');
+    assert.equal(accepted,true);assert.equal(h.messages[0].at,100900);
+    assert.equal(h.messages[0].orderAt,100900-offset);assert.deepEqual(game.counts(),{tiny:0,reverse:0,speed:1});
+    h.chat.disconnect();
+  }
+});
+test('minimum clock samples ignore delayed keepalives and raw server time preserves revote ordering',async()=>{
+  const h=harness();await h.connect();await h.welcome(h.sockets[0],97500); // Initial offset 2500ms.
+  const game=new Game('live');game.openVote(100000);const outcomes=[];
+  h.chat.onMessage=message=>{h.messages.push(message);outcomes.push(game.vote(message,h.time.now));};
+  h.time.now=103100;await h.send(100500,'!tiny','first');
+  h.time.now=103200;await h.sockets[0].emit('session_keepalive',{}, {message_timestamp:new Date(101200).toISOString()}); // Better offset 2000ms.
+  h.time.now=103300;await h.send(100600,'!reverse','newer');
+  assert.ok(h.messages[1].at<h.messages[0].at); // Clock estimate changed, event order did not.
+  h.time.now=103400;await h.send(100550,'!speed','out-of-order');
+  h.time.now=104000;await h.sockets[0].emit('session_keepalive',{}, {message_timestamp:new Date(99000).toISOString()}); // Delayed sample must not inflate offset.
+  h.time.now=104100;await h.send(101000,'!speed','latest');
+  assert.deepEqual(outcomes,[true,true,false,true]);assert.equal(h.messages.at(-1).at,103000);
+  assert.deepEqual(game.counts(),{tiny:0,reverse:0,speed:1});h.chat.disconnect();
+});
+test('clock alignment still rejects pre-window, duplicate, out-of-order and closed-window delivery',async()=>{
+  const h=harness();await h.connect();await h.welcome(h.sockets[0],98000);
+  const game=new Game('live');game.openVote(100500);const outcomes=[];
+  h.chat.onMessage=message=>outcomes.push(game.vote(message,h.time.now));
+  h.time.now=101100;await h.send(98400,'!tiny','stale'); // Corrected time 100400: before this vote.
+  h.time.now=101200;await h.send(98900,'!reverse','current');
+  h.time.now=101300;await h.send(99000,'!speed','current'); // Duplicate message ID.
+  h.time.now=101400;await h.send(98800,'!speed','older');
+  h.time.now=112500;await h.send(100000,'!speed','delayed'); // Old event delivered at the local deadline.
+  h.time.now=112600;await h.send(110600,'!tiny','after-close');
+  assert.deepEqual(outcomes,[false,true,false,false,false,false]);
+  assert.deepEqual(game.counts(),{tiny:0,reverse:1,speed:0});h.chat.disconnect();
+});
 test('live status waits for enabled subscription; subscription is own-channel read-only',async()=>{
   const h=harness();await h.connect();assert.equal(h.chat.state,'connecting');await h.welcome(h.sockets[0]);assert.equal(h.chat.state,'connected');
   const body=JSON.parse(h.requests[1].options.body);

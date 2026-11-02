@@ -2,8 +2,8 @@ const SOCKET_URL = 'wss://eventsub.wss.twitch.tv/ws?keepalive_timeout_seconds=30
 export class TwitchChat {
   // Keep the browser host-method receiver; a copied fetch called on this is invalid.
   constructor({onStatus = () => {}, onMessage = () => {}, fetchFn = (...args) => globalThis.fetch(...args),
-    Socket = globalThis.WebSocket, clock = globalThis} = {}) {
-    Object.assign(this, {onStatus, onMessage, fetchFn, Socket, clock});
+    Socket = globalThis.WebSocket, clock = globalThis, now = () => Date.now()} = {}) {
+    Object.assign(this, {onStatus, onMessage, fetchFn, Socket, clock, now});
     this.sockets = new Set(); this.generation = 0; this.active = null; this.stopped = true;
   }
   status(state, detail) { this.state = state; this.onStatus({state, detail, login:this.identity?.login || ''}); }
@@ -59,11 +59,18 @@ export class TwitchChat {
     socket.welcomeTimer = welcomeTimer;
     socket.onmessage = async ({data}) => {
       if (generation !== this.generation || this.stopped || !this.sockets.has(socket)) return;
+      const receivedAt = this.now();
       let envelope;
       try { envelope = JSON.parse(data); } catch { return; }
       const type = envelope.metadata?.message_type;
+      const serverAt = Date.parse(envelope.metadata?.message_timestamp);
       if (type === 'session_welcome') {
+        if (welcomed) return;
+        if (!Number.isFinite(serverAt)) {
+          this.fail('Twitch did not supply a valid connection timestamp. Reconnect to retry.'); return;
+        }
         welcomed = true; this.clock.clearTimeout(welcomeTimer);
+        socket.clockOffset = receivedAt - serverAt;
         this.active = socket;
         this.keepalive = (envelope.payload.session.keepalive_timeout_seconds || 30) * 1000;
         this.armWatchdog();
@@ -75,13 +82,20 @@ export class TwitchChat {
         } catch (error) { if (generation === this.generation) this.fail(error.message); }
       } else if (type === 'session_keepalive' || type === 'notification') {
         if (socket === this.active) this.armWatchdog();
+        if (type === 'session_keepalive' && Number.isFinite(serverAt) && Number.isFinite(socket.clockOffset)) {
+          // Receipt time includes network delay. The smallest sample is the least
+          // inflated clock offset; a delayed keepalive must never move old chat forward.
+          socket.clockOffset = Math.min(socket.clockOffset, receivedAt - serverAt);
+        }
         if (type === 'notification' && envelope.payload.subscription?.type === 'channel.chat.message') {
           const event = envelope.payload.event;
           if (event?.broadcaster_user_id !== this.identity.user_id) return;
           // Shared-chat audiences do not alter this channel's ballot.
           if (event.source_broadcaster_user_id && event.source_broadcaster_user_id !== this.identity.user_id) return;
+          if (!Number.isFinite(serverAt) || !Number.isFinite(socket.clockOffset)) return;
           this.onMessage({userId:event.chatter_user_id, messageId:event.message_id,
-            text:event.message?.text || '', at:Date.parse(envelope.metadata.message_timestamp), source:'live'});
+            text:event.message?.text || '', at:serverAt + socket.clockOffset,
+            orderAt:serverAt, source:'live'});
         }
       } else if (type === 'session_reconnect') {
         const reconnectUrl = envelope.payload.session?.reconnect_url;

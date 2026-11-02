@@ -31,17 +31,18 @@ export class Game {
     this.clearBallot(); this.modifier = 'none'; this.result = null;
     this.voteStart = now; this.voteEnd = now + VOTE_MS; this.phase = 'voting'; return true;
   }
-  vote({userId, messageId, text, at, source}, now) {
+  vote({userId, messageId, text, at, orderAt = at, source}, now) {
     const choice = parseVote(text);
     if (this.phase !== 'voting' || source !== this.mode || !choice || !userId || !messageId ||
-        !Number.isFinite(at) || at < this.voteStart || at >= this.voteEnd || now >= this.voteEnd ||
+        !Number.isFinite(at) || !Number.isFinite(orderAt) || at < this.voteStart || at >= this.voteEnd || now >= this.voteEnd ||
         at > now + 2000 || this.seen.has(messageId)) return false;
     this.seen.add(messageId);
     // Bounded memory even in a very active channel; latest user ballot remains authoritative.
     if (this.seen.size > 20000) this.seen.delete(this.seen.values().next().value);
     const old = this.votes.get(userId);
-    if (old && at < old.at) return false;
-    this.votes.set(userId, {choice, at}); return true;
+    // Keep ordering in the source clock even when transport clock alignment improves.
+    if (old && orderAt < old.orderAt) return false;
+    this.votes.set(userId, {choice, at, orderAt}); return true;
   }
   counts() {
     const counts = {tiny:0, reverse:0, speed:0};
