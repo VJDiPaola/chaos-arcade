@@ -2,7 +2,9 @@
 
 Status: **Submitted to the Codex x TwitchCon Hackathon on November 2, 2026, at approximately 3:57pm Eastern**, before the 4pm target. Devpost displayed "Project submitted!" and the project page lists the hackathon under "SUBMITTED TO." Entry: https://devpost.com/software/chaos-arcade. Submission ID: `1279429`.
 
-The game is publicly deployed and connected to actual Twitch chat. The 75-second captioned demo contains a real `!speed` vote, Double Speed challenge, and scored result. The channel was offline. The owner approved the final submission and rules/terms agreement. The video is Unlisted, with the made-for-kids audience setting selected at the owner's direction.
+The game is publicly deployed and connected to actual Twitch chat. The corrected 85-second captioned demo contains a real `!tiny` to `!reverse` revote, a Reverse challenge, a `!speed` vote and Double Speed timeout, and the resulting scores. It also shows the actual earlier Codex build conversation. The channel was offline. The owner approved the final submission and rules/terms agreement, then authorized the corrected upload and Devpost update. The corrected video is Unlisted and not made for kids, as explicitly confirmed by the owner.
+
+The corrected video and matching public description were saved at approximately **4:41pm Eastern on November 2**, before the official 5pm deadline. Devpost retained **SUBMITTED, 5/5 steps done**, and the public page was verified with the new YouTube embed.
 
 Implementation checkpoint: `2a64840`. All 22 deterministic tests and the production build passed, including regressions for the browser fetch receiver and alignment between Twitch and browser clocks. The deployed clock fix was verified with an immediate real `!tiny` vote followed by `!reverse`: the choice changed while the voter count stayed at one. Browser checks also covered a full session, timeout, disconnected-live guard, 390px layout, and 1280x720 presentation. Actual tab capture, download, and MP4 decoding passed. The chosen captioned demo is silent; microphone capture was not used.
 
@@ -42,7 +44,7 @@ Voting also needs precise rules: duplicate messages must not count twice, viewer
 
 ### What works today
 
-Twenty-two deterministic tests and the production build pass. Browser checks covered a full match, restart, timeouts, disconnected live mode, narrow screens, and a 720p presentation. In real Twitch tests on team_vince, actual commands became votes and changed the selected challenge. The recorded round shows !speed selecting Double Speed and producing a scored result. An additional live test verified that changing from !tiny to !reverse replaces the ballot without adding a voter. The channel was offline during these tests; this is a hackathon prototype, with no claim of streamer adoption or an active broadcast.
+Twenty-two deterministic tests and the production build pass. Browser checks covered a full match, restart, timeouts, disconnected live mode, narrow screens, and a 720p presentation. The corrected 1080p demo shows actual Twitch commands in team_vince's chat: !reverse replaces a prior !tiny vote while the voter count stays at one, then !speed selects Double Speed in the next round. Both rounds show the resulting score; the second also demonstrates the timeout rule. The channel was offline during these tests; this is a hackathon prototype, with no claim of streamer adoption or an active broadcast.
 
 ### What's next
 
@@ -52,7 +54,7 @@ Test the pacing with streamers and viewers, tune voting windows for stream delay
 
 - Game URL: https://chaos-arcade-teamvince.vercel.app/ (public page, rehearsal, and an actual Twitch-selected round verified).
 - Source repository: https://github.com/VJDiPaola/chaos-arcade (public, main branch).
-- YouTube demo: https://youtu.be/SDbK55K7JN8 — Unlisted, 75.033 seconds, captioned. The final MP4 decoded successfully; browser playback works; YouTube metadata was retrieved without authentication; Devpost accepted and embedded the link. The browser playback check used an existing signed-in session, so it is not described as logged-out playback proof.
+- YouTube demo: https://youtu.be/jvNdcUcGnvA — Unlisted, 85.033 seconds, 1920×1080 at 30 fps, captioned and silent. The final MP4 decoded successfully; actual YouTube playback reported 1920×1080; metadata was retrieved without authentication; Devpost saved and publicly embedded the new link. The browser playback check used an existing signed-in session, so it is not described as logged-out playback proof.
 - Main Codex session ID: `01a18078-9a23-7320-bc0f-0df82dca7f6b`.
 - Real Twitch proof: read-only authorization and enabled EventSub subscription for team_vince; `!tiny` accepted as one vote, Tiny Target selected, challenge completed with chat score 1. Channel offline; no active broadcast claimed.
 - Submitted entry: https://devpost.com/software/chaos-arcade (explicit submission confirmation observed at approximately 3:57pm Eastern on November 2, 2026).

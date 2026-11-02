@@ -26,9 +26,9 @@ November 2: implementation commit `2a64840` passes 22 deterministic checks and t
 
 Live integration is verified in signed-in Chrome. Real Twitch commands selected Tiny Target and Double Speed and produced scored rounds. Live testing exposed an unbound browser fetch receiver, fixed in `f447079`, and a Twitch/browser clock mismatch, fixed in `2a64840`. A fresh deployed test accepted an immediate !tiny vote and replaced it with !reverse while keeping one voter. The channel was offline; this is real chat integration, not a broadcast claim.
 
-A 75-second captioned MP4 is published as an Unlisted [YouTube demo](https://youtu.be/SDbK55K7JN8). Playback works, unauthenticated YouTube metadata resolves, and Devpost accepted the embedded video. The owner selected the made-for-kids audience setting.
+The corrected 85-second captioned [YouTube demo](https://youtu.be/jvNdcUcGnvA) is Unlisted and shows the entire app at native 1920×1080. It includes real Twitch revoting, two scored rounds, and actual footage of the earlier Codex build conversation. YouTube playback was verified at 1920×1080, unauthenticated metadata resolves, and the public Devpost entry embeds the corrected video. The owner confirmed that the corrected upload is general-audience content, not made for kids.
 
-The [Devpost entry](https://devpost.com/software/chaos-arcade) was submitted on November 2 at approximately **3:57pm Eastern**, before the 4pm target. The owner confirmed eligibility, survey answers, and the final rules/terms agreement. Devpost displayed "Project submitted!" and "SUBMITTED TO Codex x TwitchCon Hackathon." Submission ID: `1279429`.
+The [Devpost entry](https://devpost.com/software/chaos-arcade) was submitted on November 2 at approximately **3:57pm Eastern**, before the 4pm target. The corrected video and matching description were saved at approximately **4:41pm Eastern**, before the official 5pm deadline; Devpost retained **SUBMITTED, 5/5 steps done**. The owner confirmed eligibility, survey answers, and the final rules/terms agreement. Submission ID: `1279429`.
 
 ## Acceptance and submission evidence
 
