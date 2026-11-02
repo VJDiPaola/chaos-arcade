@@ -1,8 +1,8 @@
 # Chaos Arcade submission draft
 
-Status: game built, locally verified, and publicly deployed. A round and security headers were checked on the public deployment. Twitch app Client ID is configured; live authorization, message verification, video upload, and submission remain pending. Update the remaining links and claims against final evidence before pasting into Devpost.
+Status: game built, publicly deployed, and connected to actual Twitch chat. A real `!tiny` message from `team_vince` selected Tiny Target, followed by a completed challenge and chat score increment. The channel was offline. Recording, video upload, and submission remain pending. Devpost project creation currently stalls without opening an editor or producing a draft.
 
-Local implementation checkpoint: `bd85168508a5689ce157b82863b5d027e29aea20`. All 18 deterministic tests and the production build passed. Browser checks completed a five-round session, timed-out challenge, disconnected-live guard, 390px layout, and 1280x720 presentation. Recorder assets load; actual screen and microphone capture still need a device test.
+Implementation checkpoint: `f447079`. All 19 deterministic tests and the production build passed, including a regression for the browser fetch receiver exposed during live testing. Browser checks completed a five-round session, timed-out challenge, disconnected-live guard, 390px layout, and 1280x720 presentation. Recorder assets load; actual screen and microphone capture still need a device test.
 
 ## Project name
 
@@ -24,11 +24,11 @@ I used OpenAI Codex to explore five gameplay and visual directions, choose the a
 
 ## Required links and evidence
 
-- Game URL: https://chaos-arcade-teamvince.vercel.app/ (public page and a rehearsal round verified).
+- Game URL: https://chaos-arcade-teamvince.vercel.app/ (public page, rehearsal, and an actual Twitch-selected round verified).
 - Source repository: https://github.com/VJDiPaola/chaos-arcade (public, main branch).
 - YouTube demo: pending recording, upload, and logged-out playback.
 - Main Codex session ID: `01a18078-9a23-7320-bc0f-0df82dca7f6b`.
-- Real Twitch proof: team_vince account and 2FA confirmed by owner; app Client ID supplied. App authorization and message-to-vote readback pending.
+- Real Twitch proof: read-only authorization and enabled EventSub subscription for team_vince; `!tiny` accepted as one vote, Tiny Target selected, challenge completed with chat score 1. Channel offline; no active broadcast claimed.
 - Devpost submission URL/status: pending.
 
 ## Built with

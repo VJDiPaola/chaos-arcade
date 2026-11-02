@@ -22,7 +22,9 @@ Original concept gallery and Last Shuttle prototype remain separate. This app is
 
 ## Current checkpoint
 
-November 2: implementation commit `bd85168508a5689ce157b82863b5d027e29aea20` passes 18 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are deployed at https://chaos-arcade-teamvince.vercel.app/ with public source at https://github.com/VJDiPaola/chaos-arcade. A public rehearsal round and the deployed security headers passed verification. The owner supplied the public Twitch Client ID after creating team_vince and enabling 2FA. Real Twitch message proof, recorded video, and final submission remain pending.
+November 2: implementation commit `f447079` passes 19 deterministic checks and the production build. Browser verification covers a full match, timeout, disconnected live mode, phone-width layout, and 720p presentation. The app and recorder are deployed at https://chaos-arcade-teamvince.vercel.app/ with public source at https://github.com/VJDiPaola/chaos-arcade. A public rehearsal round and the deployed security headers passed verification.
+
+Live integration is verified in signed-in Chrome: Twitch confirmed the EventSub subscription for `team_vince`; an authorized `!tiny` message became one Twitch vote, selected Tiny Target (target 63–71), and the completed challenge awarded chat one point. The channel was offline; this is real Twitch chat proof, not a broadcast claim. Initial live testing exposed an unbound browser `fetch` receiver, fixed in `f447079` with a regression test. Recording, YouTube playback, and final submission remain pending. Devpost project creation currently stalls without creating a draft; a manual owner check is pending.
 
 ## Acceptance and submission evidence
 
